@@ -5,7 +5,7 @@ class Game
 	end
 
 	def update_bonus
-		(@frames.count - 1).times do |index|
+		(@frames.count - 1).times do |index| #bonus points are scored as base points for the last frame
 			frame = @frames[index]
 			next_frame = @frames[index + 1] if @frames[index+1]
 			if frame.spare?
@@ -15,7 +15,7 @@ class Game
 					frame.bonus += (next_frame.first_roll + next_frame.second_roll)
 				else
 					if @frames[index + 2]
-						next_next_frame = @frames[index + 2]  #if walking off array, access later rolls instead of next frames
+						next_next_frame = @frames[index + 2]  
 						if next_next_frame.strike?
 							frame.bonus += (next_frame.first_roll + next_next_frame.first_roll)
 						else
@@ -58,10 +58,8 @@ class Game
 		puts "Final Score: #{score}"
 	end
 
-
 end
 
-#attributes: score_added first_roll, second_roll, 
 class Frame
 	@@total_pins = 10
 	attr_reader :first_roll, :second_roll, :base_score, :frame_number, :third_roll
@@ -83,24 +81,21 @@ class Frame
 
 	def roll_one
 		@first_roll = rand(@@total_pins + 1)
-
-		if (@first_roll < @@total_pins) || (@first_roll == @@total_pins && @frame_number == 10)
+		if (@first_roll < @@total_pins) || (@first_roll == @@total_pins && @frame_number == 10) #non-strikes for last frame strikes
 			pins_left = @@total_pins - @first_roll
 			roll_two(pins_left)
 		else
-			@base_score += @@total_pins
+			@base_score += @@total_pins #all other strikes
 		end
 	end
 
 	def roll_two(pins_left)
 		@second_roll = rand(pins_left + 1)
 		@base_score += (@first_roll + @second_roll)
-
 		if @frame_number == 10 
-			roll_three if @first_roll == 10
+			roll_three if @first_roll == @@total_pins
 			roll_three if (@first_roll + @second_roll == @@total_pins) && @first_roll != @@total_pins	
 		end
-
 	end
 
 	def roll_three
