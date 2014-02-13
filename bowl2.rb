@@ -7,27 +7,23 @@ class Game
 	def update_bonus
 		(@frames.count - 1).times do |index| #bonus points are scored as base points for the last frame
 			frame = @frames[index]
-			next_frame = @frames[index + 1] if @frames[index+1]
+			next_frame = @frames[index + 1]
 			if frame.spare?
-				frame.bonus += next_frame.first_roll if next_frame
-			elsif frame.strike? && next_frame
+				frame.bonus += next_frame.first_roll 
+			elsif frame.strike? 
 				if !next_frame.strike?
 					frame.bonus += (next_frame.first_roll + next_frame.second_roll)
 				else
 					if @frames[index + 2]
 						next_next_frame = @frames[index + 2]  
-						if next_next_frame.strike?
-							frame.bonus += (next_frame.first_roll + next_next_frame.first_roll)
-						else
-							frame.bonus += (next_frame.first_roll + next_frame.second_roll)
-						end
-					else
+						frame.bonus += (next_frame.first_roll + next_next_frame.first_roll)
+					else #endgame logic
 						frame.bonus += (next_frame.first_roll + next_frame.second_roll)
 					end
-				end
-			end
-		end
-	end
+				end #end of !next_frame.strike?
+			end #end of frame.spare?
+		end #end of loop
+	end #end of update_bonus
 
 	def execute_frame(number)
 		@frames << Frame.new(number)
