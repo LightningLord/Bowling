@@ -28,7 +28,6 @@ class Game
 	def execute_frame(number)
 		@frames << Frame.new(number)
 		@frames.last.roll_one
-		
 	end
 
 
@@ -77,7 +76,7 @@ class Frame
 
 	def roll_one
 		@first_roll = rand(@@total_pins + 1)
-		if (@first_roll < @@total_pins) || (@first_roll == @@total_pins && @frame_number == 10) #non-strikes for last frame strikes
+		if (@first_roll < @@total_pins) || (@first_roll == @@total_pins && @frame_number == 10) #non-strikes or last frame strikes
 			pins_left = @@total_pins - @first_roll
 			roll_two(pins_left)
 		else
@@ -89,8 +88,8 @@ class Frame
 		@second_roll = rand(pins_left + 1)
 		@base_score += (@first_roll + @second_roll)
 		if @frame_number == 10 
-			roll_three if @first_roll == @@total_pins
-			roll_three if (@first_roll + @second_roll == @@total_pins) && @first_roll != @@total_pins	
+			roll_three if strike?
+			roll_three if spare?
 		end
 	end
 
@@ -107,4 +106,5 @@ game.play
 
 #refactoring
 #testing (if quick)
+#last point bonus logic (best practice?)
 
