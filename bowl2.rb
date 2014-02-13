@@ -2,22 +2,12 @@ class Game
 	@@length_of_game = 10
 	def initialize
 		@frames = []
-		@score = 0
-
-	end
-
-	def calculate_total_score
-		update_bonus
-		@frames.each {|frame| @score += (frame.base_score + frame.bonus)}
-		return @score
 	end
 
 	def update_bonus
 		(@frames.count - 1).times do |index|
 			frame = @frames[index]
 			next_frame = @frames[index + 1] if @frames[index+1]
-
-
 			if frame.spare?
 				frame.bonus += next_frame.first_roll if next_frame
 			elsif frame.strike? && next_frame
@@ -48,7 +38,7 @@ class Game
 
 	def play
 		(@@length_of_game).times {|i| execute_frame(i+1)}
-		calculate_total_score
+		update_bonus
 		display_score
 	end
 
@@ -65,7 +55,7 @@ class Game
 			puts "Total score: #{score}"
 			puts
 		end
-		puts "Final Score: #{@score}"
+		puts "Final Score: #{score}"
 	end
 
 
