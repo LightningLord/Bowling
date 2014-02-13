@@ -106,5 +106,5 @@ game.play
 
 
 #refactoring
-#testing (last two frames are both strikes)
+#testing (if quick)
 
