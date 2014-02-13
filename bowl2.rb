@@ -76,7 +76,7 @@ class Frame
 
 	def roll_one
 		@first_roll = rand(@@total_pins + 1)
-		if (@first_roll < @@total_pins) || (@first_roll == @@total_pins && @frame_number == 10) #non-strikes or last frame strikes
+		if (@first_roll < @@total_pins) || (strike? && @frame_number == 10) #non-strikes or last frame strikes
 			pins_left = @@total_pins - @first_roll
 			roll_two(pins_left)
 		else
@@ -85,7 +85,7 @@ class Frame
 	end
 
 	def roll_two(pins_left)
-		@second_roll = rand(pins_left + 1)
+		@second_roll = pins_left == 0 ?  rand(@@total_pins + 1) :  rand(pins_left + 1)
 		@base_score += (@first_roll + @second_roll)
 		if @frame_number == 10 
 			roll_three if strike?
